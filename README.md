@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## 1. Setup 
 
 ### 1.1 Apple M1
@@ -16,3 +17,6 @@
 ```
 pip install git+https://github.com/nirajpandkar/spinningup.git@2023Jan_dependency_upgrades
 ``````
+=======
+# Quadcopter-RL
+>>>>>>> 0e38acb53ed8dd58d6b08bcb30ada48983053a3b
