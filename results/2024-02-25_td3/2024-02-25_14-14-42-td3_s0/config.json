@@ -1,0 +1,50 @@
+{
+    "ac_kwargs":	{
+        "checkpoint":	"saved_policies/best_gps/policy",
+        "hidden_sizes":	[
+            128,
+            128
+        ]
+    },
+    "act_noise":	0.1,
+    "actor_critic":	"ActorCritic",
+    "batch_size":	256,
+    "env_fn":	"<function main.<locals>.<lambda> at 0x17a8ebf70>",
+    "epochs":	1,
+    "exp_name":	"td3",
+    "gamma":	0.99,
+    "logger":	{
+        "<spinup.utils.logx.EpochLogger object at 0x17a8f4130>":	{
+            "epoch_dict":	{},
+            "exp_name":	"td3",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"results/2024-02-25_td3/2024-02-25_14-14-42-td3_s0",
+            "output_file":	{
+                "<_io.TextIOWrapper name='results/2024-02-25_td3/2024-02-25_14-14-42-td3_s0/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"td3",
+        "output_dir":	"results/2024-02-25_td3/2024-02-25_14-14-42-td3_s0"
+    },
+    "max_ep_len":	750,
+    "noise_clip":	0.5,
+    "num_test_episodes":	100,
+    "pi_lr":	0.001,
+    "policy_delay":	100,
+    "polyak":	0.002,
+    "q_lr":	0.003,
+    "replay_size":	1000000,
+    "save_freq":	1,
+    "seed":	0,
+    "start_steps":	10000,
+    "steps_per_epoch":	4000,
+    "target_noise":	0.2,
+    "update_after":	256,
+    "update_every":	10
+}

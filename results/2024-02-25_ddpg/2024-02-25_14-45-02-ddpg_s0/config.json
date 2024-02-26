@@ -1,0 +1,47 @@
+{
+    "ac_kwargs":	{
+        "checkpoint":	"saved_policies/best_gps/policy",
+        "hidden_sizes":	[
+            128,
+            128
+        ]
+    },
+    "act_noise":	0.1,
+    "actor_critic":	"ActorCritic",
+    "batch_size":	256,
+    "env_fn":	"<function main.<locals>.<lambda> at 0x16fdcf700>",
+    "epochs":	1,
+    "exp_name":	"ddpg",
+    "gamma":	0.99,
+    "logger":	{
+        "<spinup.utils.logx.EpochLogger object at 0x16fdd6040>":	{
+            "epoch_dict":	{},
+            "exp_name":	"ddpg",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"results/2024-02-25_ddpg/2024-02-25_14-45-02-ddpg_s0",
+            "output_file":	{
+                "<_io.TextIOWrapper name='results/2024-02-25_ddpg/2024-02-25_14-45-02-ddpg_s0/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"ddpg",
+        "output_dir":	"results/2024-02-25_ddpg/2024-02-25_14-45-02-ddpg_s0"
+    },
+    "max_ep_len":	750,
+    "num_test_episodes":	100,
+    "pi_lr":	0.001,
+    "polyak":	0.002,
+    "q_lr":	0.003,
+    "replay_size":	1000000,
+    "save_freq":	1,
+    "seed":	0,
+    "start_steps":	10000,
+    "steps_per_epoch":	4000,
+    "update_after":	1000,
+    "update_every":	50
+}
