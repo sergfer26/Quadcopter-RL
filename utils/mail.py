@@ -156,7 +156,7 @@ def send_resport(func, args=[], reciever='sfernandezm97@gmail.com'):
 
         # Termina análisis y manda resultados
         path2pdf = f'{path}/reporte.pdf' if os.path.exists(f'{path}/reporte.pdf') else None
-        send_email(reciever=reciever, subject='Terminó entrenamiento '+path,
+        send_email(reciever=reciever, subject='Terminó entrenamiento '+ path,
                    message=printed_on_terminal, path2pdf=path2pdf)
 
     except:

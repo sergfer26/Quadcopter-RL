@@ -11,6 +11,24 @@ from simulation import plot_rollouts, create_animation, n_rollouts
 from env.params import STATE_NAMES, ACTION_NAMES, REWARD_NAMES, ENV_PARAMS, STATE_PARAMS
 from utils import send_resport, create_report
 
+import pandas as pd 
+from matplotlib import pyplot as  plt
+
+
+def plot_returns(data: pd.DataFrame, mean_key: str, std_key: str, ax=None):
+    mean = data[mean_key].to_numpy()
+    std = data[std_key].to_numpy()
+    epochs = data["Epoch"].to_numpy()
+    fig = None
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.plot(epochs, mean, label=mean_key)
+    ax.fill_between(epochs, mean-std, mean + std ,alpha=0.3)
+    ax.set_xlabel('epochs')
+    ax.set_ylabel('returns')
+    ax.legend()
+    return fig, ax
+
 
 def main(args):
      logger_kwargs = setup_logger_kwargs(args.method, args.seed, 
@@ -90,6 +108,16 @@ def main(args):
      states_samples = states[sample_indices]
      actions_samples = actions[sample_indices]
      scores_samples = scores[sample_indices]
+
+     path = f"{output_dir}/progress.txt"
+     data = pd.read_csv(path, delimiter='\t', encoding='utf-8')
+     fig, ax = plt.subplots(1, 2, dpi=150)
+     for e, keys in enumerate([('AverageEpRet', 'StdEpRet'), ('AverageTestEpRet', 'StdTestEpRet')]):
+          mean_key, std_key = keys
+          plot_returns(data, mean_key, std_key, ax=ax[e])
+     fig.savefig(f'{output_dir}/train_performance.png')
+
+     create_report(output_dir, method=args.method, state_params=STATE_PARAMS, env_params=ENV_PARAMS)
      
      print('Rendering animation...')
      create_animation(states_samples,
@@ -101,9 +129,9 @@ def main(args):
                       score_labels=REWARD_NAMES,
                       path=subpath
                       )
+     return output_dir
 
      # 2.5 Report results
-     create_report(output_dir, method=args.method, state_params=STATE_PARAMS, env_params=ENV_PARAMS)
 
 
 
@@ -117,7 +145,6 @@ if __name__ == '__main__':
      parser.add_argument('--seed', '-s', type=int, default=0)
      parser.add_argument('--epochs', type=int, default=1000)
      parser.add_argument('--replay-size', type=int, default=int(1e6))
-     parser.add_argument('--gama', type=float, default=0.99)
      parser.add_argument('--polyak', type=float, default=1e-3) # -> rho = \tau -1 (multiplies target)
      parser.add_argument('--steps-per-epoch', type=int, default=4000)
      parser.add_argument('--pi-lr', type=float, default=5e-4)
