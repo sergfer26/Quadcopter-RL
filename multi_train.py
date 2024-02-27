@@ -8,12 +8,12 @@ from joblib import Parallel, delayed
 def fit(params: dict):
     instruction = "python train.py"
     for key, val in params.items():
-        instruction += f"--{key.replace('_', '-')} {val}" 
-    instruction += "--epochs 100"
-    instruction += "--checkpoint"
-    instruction += "--send-mail"
-    instruction += "--method td3"
-    instruction += "--seed 123"
+        instruction += f" --{key.replace('_', '-')} {val}" 
+    instruction += " --epochs 100"
+    instruction += " --checkpoint"
+    instruction += " --send-mail"
+    instruction += " --method td3"
+    instruction += " --seed 123"
     os.system(instruction)
 
 
