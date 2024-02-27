@@ -18,3 +18,4 @@ fig2.savefig('action_rollouts.png')
 fig3, _ = plot_rollouts(scores, env.time, REWARD_NAMES, alpha=0.05)
 fig3.savefig('score_rollouts.png')
 
+
