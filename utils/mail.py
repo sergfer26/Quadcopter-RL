@@ -112,7 +112,7 @@ def send_email(credentials_path='credentials.txt',
         print('el archivo de credenciales no existe')
 
 
-def send_resport(func, args=[], reciever='sfernandezm97@gmail.com'):
+def send_resport(func, args=[], reciever: str ='sfernandezm97@gmail.com', subject: str = 'Terminó entrenamiento'):
     """Evalua la funcion func y guarda registro de lo que se imprime en
         pantalla durante esta evaluación. func DEBE devolver dos cadenas,
         la primera (path_) indica la ruta donde se guardará un reporte con todo
@@ -156,7 +156,7 @@ def send_resport(func, args=[], reciever='sfernandezm97@gmail.com'):
 
         # Termina análisis y manda resultados
         path2pdf = f'{path}/reporte.pdf' if os.path.exists(f'{path}/reporte.pdf') else None
-        send_email(reciever=reciever, subject='Terminó entrenamiento '+ path,
+        send_email(reciever=reciever, subject=f'{subject}: {path}',
                    message=printed_on_terminal, path2pdf=path2pdf)
 
     except:

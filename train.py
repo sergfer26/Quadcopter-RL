@@ -170,9 +170,9 @@ if __name__ == '__main__':
      parser.add_argument('--policy-delay', type=int, default=2) # td3
 
      args = parser.parse_args()
-
      if args.send_mail:
-          send_resport(main, args=[args])
+          subject = f'Entrenamiento {args.method}'
+          send_resport(main, args=[args], subject=subject)
      else:
           main(args)
 
