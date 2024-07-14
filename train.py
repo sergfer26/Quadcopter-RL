@@ -80,11 +80,11 @@ def main(args):
           
      # 2.1 Setup enviorement and agent
      env = QuadcopterWrapper(QuadcopterEnv())
-     # ac_kwargs["checkpoint"] = f"{output_dir}/pyt_save/model.pt"
-     # if args.method == 'ddpg':
-     #      agent = ActorCriticDDPG(env.observation_space, env.action_space, **ac_kwargs)
-     # elif args.method == 'td3':
-     #      agent = ActorCriticTD3(env.observation_space, env.action_space, **ac_kwargs)
+     ac_kwargs["checkpoint"] = f"{output_dir}/pyt_save/model.pt"
+     if args.method == 'ddpg':
+          agent = ActorCriticDDPG(env.observation_space, env.action_space, **ac_kwargs)
+     elif args.method == 'td3':
+          agent = ActorCriticTD3(env.observation_space, env.action_space, **ac_kwargs)
      agent = torch.load(f"{output_dir}/pyt_save/model.pt")
 
      # 2.2 Simulation
@@ -164,6 +164,9 @@ if __name__ == '__main__':
      parser.add_argument('--no-checkpoint', dest='checkpoint', action='store_false', help="Disable loading policy checkpoint")
      parser.add_argument('--send-mail', action='store_true', default=True, help='Enable sending mail')
      parser.add_argument('--no-mail', dest='send_mail', action='store_false', help="Disable sending mail")
+     parser.add_argument('--check-contained', action='store_true', default=False, help='Checks if drone contained during sim')
+     parser.add_argument('--mail-subject', default=None, type=str)
+
 
      parser.add_argument('--target-noise', type=float, default=0.2) # td3
      parser.add_argument('--noise-clip', type=float, default=0.5) # td3
@@ -172,6 +175,8 @@ if __name__ == '__main__':
      args = parser.parse_args()
      if args.send_mail:
           subject = f'Entrenamiento {args.method}'
+          if isinstance(args.mail_subject, str):
+               subject = args.mail_subject
           send_resport(main, args=[args], subject=subject)
      else:
           main(args)
