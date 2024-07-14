@@ -80,11 +80,11 @@ def main(args):
           
      # 2.1 Setup enviorement and agent
      env = QuadcopterWrapper(QuadcopterEnv())
-     ac_kwargs["checkpoint"] = f"{output_dir}/pyt_save/model.pt"
-     if args.method == 'ddpg':
-          agent = ActorCriticDDPG(env.observation_space, env.action_space, **ac_kwargs)
-     elif args.method == 'td3':
-          agent = ActorCriticTD3(env.observation_space, env.action_space, **ac_kwargs)
+     # ac_kwargs["checkpoint"] = f"{output_dir}/pyt_save/model.pt"
+     # if args.method == 'ddpg':
+     #      agent = ActorCriticDDPG(env.observation_space, env.action_space, **ac_kwargs)
+     # elif args.method == 'td3':
+     #      agent = ActorCriticTD3(env.observation_space, env.action_space, **ac_kwargs)
      agent = torch.load(f"{output_dir}/pyt_save/model.pt")
 
      # 2.2 Simulation
