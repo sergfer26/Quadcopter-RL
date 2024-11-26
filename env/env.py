@@ -17,12 +17,18 @@ DT = ENV_PARAMS['dt']
 STEPS = ENV_PARAMS['STEPS']
 
 
+def get_reward(x, u, i):
+    reward = 0.0
+    if np.linalg.norm(x[3:6]) < 2.5:
+        reward = 10.0
+    return reward-penalty(x, u, i)
+
 
 class QuadcopterEnv(gym.Env):
     def __init__(self, 
                  check_contained: bool = False,
                  is_training: bool = False, 
-                 reward: callable = lambda x, u, i : -penalty(x, u, i),
+                 reward: callable = lambda x, u, i : get_reward(x, u, i),
                  low_obs: np.ndarray = LOW_OBS,
                  high_obs: np.ndarray = HIGH_OBS,
                  low_act: np.ndarray = LOW_ACT * np.ones(4),
