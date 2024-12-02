@@ -2,20 +2,44 @@ import torch
 import argparse
 import pathlib
 import numpy as np
-from spinup import ddpg_pytorch, td3_pytorch
-from models import ActorCriticDDPG, ActorCriticTD3
-from spinup.utils.run_utils import setup_logger_kwargs
-from env import QuadcopterEnv, QuadcopterWrapper
+import pandas as pd 
+
+from matplotlib import pyplot as  plt
 from env.equations import inv_transform_x
+from spinup import ddpg_pytorch, td3_pytorch
+from utils import send_resport, create_report
+from models import ActorCriticDDPG, ActorCriticTD3
+from env import QuadcopterEnv, QuadcopterWrapper
+from spinup.utils.run_utils import setup_logger_kwargs
 from simulation import plot_rollouts, create_animation, n_rollouts
 from env.params import STATE_NAMES, ACTION_NAMES, REWARD_NAMES, ENV_PARAMS, STATE_PARAMS
-from utils import send_resport, create_report
+from env.noise import OUNoise
 
-import pandas as pd 
-from matplotlib import pyplot as  plt
+
 
 
 def plot_returns(data: pd.DataFrame, mean_key: str, std_key: str, ax=None):
+    '''
+    Plot the mean and std of the returns
+    
+    Args
+    ----
+    data: pd.DataFrame
+        Dataframe with the data to plot
+    mean_key: str
+        Key of the mean returns
+    std_key: str
+        Key of the std of the returns
+    ax: plt.Axes
+        Axes to plot the data on
+     
+    Returns
+    -------
+    fig: plt.Figure
+        Figure with the plot
+    ax: plt.Axes
+        Axes with the plot
+    '''
     mean = data[mean_key].to_numpy()
     std = data[std_key].to_numpy()
     epochs = data["Epoch"].to_numpy()
@@ -35,9 +59,12 @@ def main(args):
                                          data_dir='results', datestamp=True)
      output_dir = logger_kwargs["output_dir"]
 
-     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv())
+     noise = None
+     if args.noise_ou:
+          noise = OUNoise(env.action_space, args.noise_mu, args.noise_theta, args.noise_max_sigma, args.noise_min_sigma, args.noise_decay_period)
+     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise))
      if args.checkpoint: 
-          path = 'saved_policies/best_gps/policy'
+          path = '/home/miguel.fernandez/Quadcopter-Deep-RL/results_gps/24_10_22_09_57/policy' # 'saved_policies/best_gps/policy'
           print(f'loading model froom path: {path}')
      else:
           path = None
@@ -139,7 +166,9 @@ def main(args):
 if __name__ == '__main__':
 
      parser = argparse.ArgumentParser()
-     parser.add_argument('--hid', type=int, default=256)
+
+     # Training arguments 
+     parser.add_argument('--hid', type=int, default=128)
      parser.add_argument('--l', type=int, default=2)
      parser.add_argument('--gamma', type=float, default=0.99)
      parser.add_argument('--seed', '-s', type=int, default=0)
@@ -159,6 +188,7 @@ if __name__ == '__main__':
      parser.add_argument('--num-anim-episodes', type=int, default=3)
      parser.add_argument('--save_freq', type=int, default=1)
 
+     # Saving and reporting arguments
      parser.add_argument('--method', type=str, default='ddpg')
      parser.add_argument('--checkpoint', action='store_true', default=True, help='Enable loading policy checkpoint')
      parser.add_argument('--no-checkpoint', dest='checkpoint', action='store_false', help="Disable loading policy checkpoint")
@@ -167,10 +197,18 @@ if __name__ == '__main__':
      parser.add_argument('--check-contained', action='store_true', default=False, help='Checks if drone contained during sim')
      parser.add_argument('--mail-subject', default=None, type=str)
 
+     # TD3 specific arguments
+     parser.add_argument('--target-noise', type=float, default=0.2)
+     parser.add_argument('--noise-clip', type=float, default=0.5)
+     parser.add_argument('--policy-delay', type=int, default=2)
 
-     parser.add_argument('--target-noise', type=float, default=0.2) # td3
-     parser.add_argument('--noise-clip', type=float, default=0.5) # td3
-     parser.add_argument('--policy-delay', type=int, default=2) # td3
+     # Noise arguments
+     parser.add_argument('--noise-ou', action='store_true', default=False, help='Enable OU noise')
+     parser.add_argument('--noise-mu', type=float, default=0.0)
+     parser.add_argument('--noise-theta', type=float, default=0.15)
+     parser.add_argument('--noise-max-sigma', type=float, default=0.9)
+     parser.add_argument('--noise-min-sigma', type=float, default=0.05)
+     parser.add_argument('--noise-decay-period', type=int, default=1e4)
 
      args = parser.parse_args()
      if args.send_mail:
