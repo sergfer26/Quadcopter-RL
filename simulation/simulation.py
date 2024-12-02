@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from spinup.algos.pytorch.ddpg.noise import OUNoise
 
 
-def rollout(agent, env, flag=False, state_init=None):
+def rollout(agent, env, flag=False, state_init=None, noise: OUNoise = None):
     '''
     Simulación de interacción entorno-agente
 
@@ -46,11 +47,13 @@ def rollout(agent, env, flag=False, state_init=None):
     i = 0
     while True:
         action = agent.get_action(state)
-        new_state, reward, done, info = env.step(action)
+        if isinstance(noise, OUNoise):
+            action = noise.get_action(action, t=i)
+        new_state, reward, done, _ = env.step(action)
         episode_reward += reward
         states[i + 1] = state
-        if isinstance(info, dict) and ('real_action' in info.keys()):
-            action = info['real_action']  # env.action(action)
+        # if isinstance(info, dict) and ('real_action' in info.keys()):
+        #     action = info['real_action']  # env.action(action)
         actions[i] = action
         scores[i] = np.array([reward, episode_reward])
         state = new_state
@@ -61,7 +64,7 @@ def rollout(agent, env, flag=False, state_init=None):
 
 
 def n_rollouts(agent, env, n, flag=False, states_init=None,
-               t_x=None, t_u=None):
+               t_x=None, t_u=None, noise: OUNoise = None):
     '''
     Retornos
     --------
@@ -86,7 +89,7 @@ def n_rollouts(agent, env, n, flag=False, states_init=None,
             else:
                 state_init = states_init
         states, actions, scores = rollout(
-            agent, env, flag=flag, state_init=state_init)
+            agent, env, flag=flag, state_init=state_init, noise=noise)
         n_states[k] = states
         n_actions[k] = actions
         n_scores[k] = scores
