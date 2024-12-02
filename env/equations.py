@@ -5,8 +5,8 @@ from scipy.integrate import odeint
 # import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 from numpy.linalg import norm
-from .constants import CONSTANTS, omega_0, W0
-from .params import ENV_PARAMS
+from env.constants import CONSTANTS, omega_0, W0
+from env.params import ENV_PARAMS
 from scipy.spatial.transform import Rotation as R
 
 G = CONSTANTS['G']

@@ -3,11 +3,11 @@ import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
 
-STATE_PARAMS = {'$u$': '0.0', '$v$': '0.0', '$w$': '0.0',
-              '$x$': '8', '$y$': '8', '$z$': '8',
-              '$p$': '0.00', '$q$': '0.0', '$r$': '0.0',
-              '$\psi$': 'np.pi/32', r'$\theta$': 'np.pi/32',
-              '$\\varphi$': 'np.pi/32'}
+STATE_PARAMS = {'$u$': '1.0', '$v$': '1.0', '$w$': '1.0',
+              '$x$': '2.0', '$y$': '2.0', '$z$': '2.0',
+              '$p$': '0.5', '$q$': '0.5', '$r$': '0.5',
+              '$\psi$': 'np.pi/64', r'$\theta$': 'np.pi/64',
+              '$\\varphi$': 'np.pi/64'}
 
 
 ENV_PARAMS = {'dt': 0.04, 'STEPS': 750, 'omega0_per': 0.60,
