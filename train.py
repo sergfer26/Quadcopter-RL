@@ -1,3 +1,4 @@
+import json
 import torch
 import argparse
 import pathlib
@@ -55,6 +56,11 @@ def plot_returns(data: pd.DataFrame, mean_key: str, std_key: str, ax=None):
 
 
 def main(args):
+     args_json = json.dumps(vars(args), indent=4)
+     print("Training Arguments: ")
+     print(args_json)
+     print("-"*50)
+
      logger_kwargs = setup_logger_kwargs(args.method, args.seed, 
                                          data_dir='results', datestamp=True)
      output_dir = logger_kwargs["output_dir"]
