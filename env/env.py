@@ -144,7 +144,8 @@ class QuadcopterEnv(gym.Env):
         info: dict
             Additional information.
         '''
-        action = self.training_noise.get_action(action, self.i)
+        if self.training_noise is not None:
+            action = self.training_noise.get_action(action, self.i)
         w1, w2, w3, w4 = action + W0
         t = [self.time[self.i], self.time[self.i+1]]
         y_dot = odeint(f, self.state, t, args=(w1, w2, w3, w4))[1]  
