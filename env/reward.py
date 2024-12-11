@@ -27,7 +27,7 @@ def get_reward(x: np.ndarray, u: np.ndarray, i: int):
 
 
 
-def get_sparse_reward(x: np.ndarray, u: np.ndarry, i: int, 
+def get_sparse_reward(x: np.ndarray, u: np.ndarray, i: int, 
                       p_1: np.ndarray = np.array([10, 10, 20]), 
                       x_target: np.ndarray = None):
     if not isinstance(x_target, np.ndarray):
