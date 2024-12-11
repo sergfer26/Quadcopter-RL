@@ -104,11 +104,13 @@ class QuadcopterEnv(gym.Env):
         contained: bool
             Whether the state is contained in the observation space.
         '''
-        x = state[3:6]
-        high = self._observation_space.high[3:6]
-        low = self._observation_space.low[3:6]
-        aux = np.logical_and(low <= x, x <= high)
-        return aux.all()
+        pos = state[3:6]
+        high = 5
+        low = -5 
+        position_bool = np.logical_and(low <= pos, pos <= high)
+        angles = state[9:]
+        angles_bool = np.logical_and(-np.pi/2 <= angles, angles <= np.pi/2)
+        return position_bool.all() and angles_bool.all()
 
     def is_done(self):
         '''
