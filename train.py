@@ -15,6 +15,7 @@ from spinup.utils.run_utils import setup_logger_kwargs
 from simulation import plot_rollouts, create_animation, n_rollouts
 from env.params import STATE_NAMES, ACTION_NAMES, REWARD_NAMES, ENV_PARAMS, STATE_PARAMS
 from env.noise import OUNoise
+from env.reward import get_reward, get_sparse_reward
 
 
 
@@ -68,7 +69,11 @@ def main(args):
      noise = None
      if args.noise_ou:
           noise = OUNoise(env.action_space, args.noise_mu, args.noise_theta, args.noise_max_sigma, args.noise_min_sigma, args.noise_decay_period)
-     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise))
+
+     reward_function = get_reward
+     if args.sparse_reward:
+          reward_function = get_sparse_reward
+     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise, reward=reward_function))
      if args.checkpoint: 
           path = '/home/miguel.fernandez/Quadcopter-Deep-RL/results_gps/24_10_22_09_57/policy' # 'saved_policies/best_gps/policy'
           print(f'loading model froom path: {path}')
@@ -207,6 +212,9 @@ if __name__ == '__main__':
      parser.add_argument('--target-noise', type=float, default=0.2)
      parser.add_argument('--noise-clip', type=float, default=0.5)
      parser.add_argument('--policy-delay', type=int, default=2)
+
+     # Reward arguments
+     parser.add_argument('--sparse-reward', type='store_true', default=False)
 
      # Noise arguments
      parser.add_argument('--noise-ou', action='store_true', default=False, help='Enable OU noise')
