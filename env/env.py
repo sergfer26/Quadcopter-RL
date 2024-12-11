@@ -105,8 +105,8 @@ class QuadcopterEnv(gym.Env):
             Whether the state is contained in the observation space.
         '''
         pos = state[3:6]
-        high = 5
-        low = -5 
+        high = self.observation_space.high[3:6]
+        low = self.observation_space.low[3:6]
         position_bool = np.logical_and(low <= pos, pos <= high)
         angles = state[9:]
         angles_bool = np.logical_and(-np.pi/2 <= angles, angles <= np.pi/2)
