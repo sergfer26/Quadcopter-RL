@@ -73,7 +73,7 @@ def main(args):
      reward_function = get_reward
      if args.sparse_reward:
           reward_function = get_sparse_reward
-     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise, reward=reward_function))
+     env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise, reward=reward_function, check_contained=args.check_contained))
      if args.checkpoint: 
           path = '/home/miguel.fernandez/Quadcopter-Deep-RL/results_gps/24_10_22_09_57/policy' # 'saved_policies/best_gps/policy'
           print(f'loading model froom path: {path}')
