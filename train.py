@@ -214,7 +214,7 @@ if __name__ == '__main__':
      parser.add_argument('--policy-delay', type=int, default=2)
 
      # Reward arguments
-     parser.add_argument('--sparse-reward', type='store_true', default=False)
+     parser.add_argument('--sparse-reward', action='store_true', default=False)
 
      # Noise arguments
      parser.add_argument('--noise-ou', action='store_true', default=False, help='Enable OU noise')
