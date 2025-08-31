@@ -1,5 +1,6 @@
-import numpy as np
 import gym
+import numpy as np
+
 
 # Ornstein-Ulhenbeck Process
 # Taken from #https://github.com/vitchyr/rlkit/blob/master/rlkit/exploration_strategies/ou_strategy.py

@@ -21,8 +21,8 @@ def get_reward(x: np.ndarray, u: np.ndarray, i: int):
         Reward of the system.
     '''
     reward = 0.0
-    if np.linalg.norm(x[3:6]) < 2.5:
-        reward = 10.0
+    # if np.linalg.norm(x[3:6]) < 2.5:
+    #     reward = 10.0
     return reward - penalty(x, u, i)
 
 

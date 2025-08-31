@@ -4,7 +4,7 @@ from copy import copy
 from gym.core import Env
 from env.equations import f
 from scipy.integrate import odeint
-from spinup.algos.pytorch.ddpg.noise import OUNoise
+from env.noise import OUNoise
 from env.constants import W0, omega_0, C
 from env.params import ENV_PARAMS, STATE_PARAMS
 from env.equations import angles2rotation, penalty

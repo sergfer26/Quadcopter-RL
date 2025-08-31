@@ -22,6 +22,8 @@ K11 = eval(ENV_PARAMS['K11'])
 K2 = eval(ENV_PARAMS['K2'])
 K21 = eval(ENV_PARAMS['K21'])
 K3 = eval(ENV_PARAMS['K3'])
+K22 = eval(ENV_PARAMS['K22'])
+K12 = eval(ENV_PARAMS['K12'])
 
 
 '''
@@ -213,19 +215,19 @@ def f_u(state, actions):
     return J
 
 
-def penalty(state, action, i=None):
+def penalty(state, action, i=None, ord: float = 2):
     '''
     falta
     '''
     # u, v, w, x, y, z, p, q, r, psi, theta, phi = state
-    return terminal_penalty(state, i) + K3 * norm(action)
+    return terminal_penalty(state, i) + K3 * norm(action, ord=ord)
 
 
-def terminal_penalty(state, i=None):
+def terminal_penalty(state, i=None, ord: float = 2):
     # u, v, w, x, y, z, p, q, r, psi, theta, phi = state
-    penalty = K1 * norm(state[3:6])
-    penalty += K11 * norm(state[:3])
+    penalty = K1 * norm(state[3:6], ord=ord)
+    penalty += K11 * (norm(state[:3], ord=ord) - K12)
     mat = angles2rotation(state[9:], flatten=False)
-    penalty += K21 * norm(state[6:9])
-    penalty += K2 * norm(np.identity(3) - mat)
+    penalty += K21 * norm(state[6:9], ord=ord)
+    penalty += K2 * (norm(np.identity(3) - mat, ord=ord) - K22)
     return penalty
