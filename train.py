@@ -68,7 +68,7 @@ def main(args):
 
      noise = None
      if args.noise_ou:
-          noise = OUNoise(env.action_space, args.noise_mu, args.noise_theta, args.noise_max_sigma, args.noise_min_sigma, args.noise_decay_period)
+          noise = OUNoise(None, args.noise_mu, args.noise_theta, args.noise_max_sigma, args.noise_min_sigma, args.noise_decay_period)
 
      reward_function = get_reward
      if args.sparse_reward:
