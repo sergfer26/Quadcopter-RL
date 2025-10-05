@@ -5,6 +5,7 @@ import pathlib
 import numpy as np
 import pandas as pd 
 
+from loguru import logger
 from matplotlib import pyplot as  plt
 from env.equations import inv_transform_x
 from spinup import ddpg_pytorch, td3_pytorch
@@ -76,7 +77,7 @@ def main(args):
      env_fn = lambda : QuadcopterWrapper(QuadcopterEnv(noise=noise, reward=reward_function, check_contained=args.check_contained))
      if args.checkpoint: 
           path = '/home/miguel.fernandez/Quadcopter-Deep-RL/results_gps/24_10_22_09_57/policy' # 'saved_policies/best_gps/policy'
-          print(f'loading model froom path: {path}')
+          logger.info(f'loading model froom path: {path}')
      else:
           path = None
 
@@ -103,6 +104,7 @@ def main(args):
                     save_freq=args.save_freq
      ) 
      # 1. Fitting
+     logger.info("[*] Begining training!")
      if args.method == 'ddpg':
           kwargs['actor_critic'] = ActorCriticDDPG
           ddpg_pytorch(**kwargs)
