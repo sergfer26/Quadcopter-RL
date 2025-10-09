@@ -1,5 +1,6 @@
 import numpy as np
-from env.equations import penalty
+from env.equations import penalty, angles2rotation
+from env.params import STATE_PARAMS
 
 
 def get_reward(x: np.ndarray, u: np.ndarray, i: int):
@@ -28,11 +29,20 @@ def get_reward(x: np.ndarray, u: np.ndarray, i: int):
 
 
 def get_sparse_reward(x: np.ndarray, u: np.ndarray, i: int, 
-                      p_1: np.ndarray = np.array([10, 10, 20]), 
-                      x_target: np.ndarray = None):
+                      x_target: np.ndarray = None) -> float:
     if not isinstance(x_target, np.ndarray):
         x_target = np.zeros_like(x)
 
-    delta_weighted = p_1 * (x[3:6] - x_target[3:6])
-    r = np.tanh(1 - np.linalg.norm(delta_weighted) ** 2) 
-    return max(0, r)
+    mat = angles2rotation(x[9:], flatten=False)
+
+    r = 5 - 5 * np.tanh(np.linalg.norm(x[3:6] - x_target[3:6])) ** 2
+    r += 1 - 1 * np.tanh(np.linalg.norm(np.identity(3) - mat)) ** 2
+
+    limits = np.array(
+        [STATE_PARAMS['x'], STATE_PARAMS['y'], STATE_PARAMS['z']]
+        )
+    if (limits < x[3:6]).any():
+        r -= 100
+
+
+    return r
