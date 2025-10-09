@@ -39,10 +39,9 @@ def get_sparse_reward(x: np.ndarray, u: np.ndarray, i: int,
     r += 1 - 1 * np.tanh(np.linalg.norm(np.identity(3) - mat)) ** 2
 
     limits = np.array(
-        [STATE_PARAMS['$x$'], STATE_PARAMS['$y$'], STATE_PARAMS['$z$']]
+        [eval(STATE_PARAMS['$x$']), eval(STATE_PARAMS['$y$']), eval(STATE_PARAMS['$z$'])]
         )
-    if (limits < x[3:6]).any():
+    position_bool = np.logical_and(-limits <= x[3:6], x[3:6] <= limits)
+    if not position_bool.all():
         r -= 100
-
-
     return r

@@ -154,7 +154,7 @@ class QuadcopterEnv(gym.Env):
         reward = self.reward(y_dot, action, self.i)
         done = self.is_done()
         if self.check_contained:
-            done = self.is_contained(self.state)
+            done = not self.is_contained(self.state)
         self.i += 1
         return self.state, reward, done, None
     
