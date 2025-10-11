@@ -35,8 +35,8 @@ def get_sparse_reward(x: np.ndarray, u: np.ndarray, i: int,
 
     mat = angles2rotation(x[9:], flatten=False)
 
-    r = 5 - 5 * np.tanh(np.linalg.norm(x[3:6] - x_target[3:6])) ** 2
-    r += 1 - 1 * np.tanh(np.linalg.norm(np.identity(3) - mat)) ** 2
+    r = 100 - 100 * np.tanh(np.linalg.norm(x[3:6] - x_target[3:6])) ** 2
+    r += 10 - 10 * np.tanh(np.linalg.norm(np.identity(3) - mat)) ** 2
 
     limits = np.array(
         [eval(STATE_PARAMS['$x$']), eval(STATE_PARAMS['$y$']), eval(STATE_PARAMS['$z$'])]
