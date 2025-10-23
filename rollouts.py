@@ -52,11 +52,11 @@ def plot_classifier(
     return ax, sc
 
 
-def rollout4mp(agent, env, mp_list, n=1, states_init=None):
+def rollout4mp(agent, env, mp_list, n=1, states_init=None, inv_transform_x=None):
     '''
     states : (n, env.steps, env.observation_space.shape[0])
     '''
-    states = n_rollouts(agent, env, n=n, states_init=states_init)[0]
+    states = n_rollouts(agent, env, n=n, t_x=inv_transform_x, states_init=states_init)[0]
     mp_list.append(states)
 
 
@@ -88,7 +88,7 @@ def rollouts(agent, env, sims, state_space, num_workers=None,
         if callable(transform_x):
             init_state = np.apply_along_axis(transform_x, -1, init_state)
         p = Process(target=rollout4mp, args=(
-            agent, other_env, states, sims, init_state
+            agent, other_env, states, sims, init_state, inv_transform_x
         )
         )
         process_list.append(p)
@@ -98,8 +98,8 @@ def rollouts(agent, env, sims, state_space, num_workers=None,
         p.join()
 
     states = np.array(list(states))
-    if callable(inv_transform_x):
-        states = np.apply_along_axis(inv_transform_x, -1, states)
+    # if callable(inv_transform_x):
+    #     states = np.apply_along_axis(inv_transform_x, -1, states)
 
     return states
 
