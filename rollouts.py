@@ -127,9 +127,8 @@ def get_color(bools):
     return np.array(['b' if b else 'r' for b in bools])
 
 def main(args):
-    policy_path = args.policy_path
-
-    pathlib.Path(policy_path).mkdir(parents=True, exist_ok=True)
+    save_path = '/'.join(args.policy_path.split('/')[:-1])
+    logger.info(f"[*] Save path at {save_path}")
 
     sims = args.sims
 
@@ -140,7 +139,7 @@ def main(args):
     env = QuadcopterEnv()
     T = int(60 / env.dt)
     list_steps = np.array([5, 15, 30, 60]) / env.dt
-    if not os.path.exists(f'{policy_path}/states_60.npz'):
+    if not os.path.exists(f'{save_path}/states_60.npz'):
         # 1. Setup
         policy = torch.load(args.policy_path)
 
@@ -161,7 +160,7 @@ def main(args):
         indices = np.array([np.where(np.all(mask1 == mask2[i], axis=1))[0]
                             for i in range(6)]).squeeze()
         states = states[indices]
-        array_path = policy_path + f'states_{int(env.time_max)}.npz'
+        array_path = save_path + f'states_{int(env.time_max)}.npz'
         np.savez(
             array_path,
             states=states,
@@ -169,7 +168,7 @@ def main(args):
         )
         logger.info(f"[*] Simulations saved at {array_path}")
     else:
-        states = np.load(f'{policy_path}/states_60.npz')['states']
+        states = np.load(f'{save_path}/states_60.npz')['states']
 
     init_states = states[:, :, 0]
     # steps=int(t * env.dt))
@@ -194,7 +193,7 @@ def main(args):
                 y_label=label[1],
                 ax=axs[i])
         fig.suptitle(f'Política, tiempo: {t * env.dt}')
-        image_path = policy_path + f'samples_policy_{int(t * env.dt)}.png'
+        image_path = save_path + f'samples_policy_{int(t * env.dt)}.png'
         logger.info(f"[*] Image saved at {image_path}")
         fig.savefig(image_path)
 
