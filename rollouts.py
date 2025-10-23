@@ -150,7 +150,7 @@ def main(args):
 
         start_time = time.time()
         states = rollouts(policy, env, sims, STATE_SPACE,
-                          inv_transform_x=inv_transform_x,
+                          inv_transform_x=None,
                           transform_x=transform_x)
         end_time = time.time()
         logger.info(f"Policy's simulations ended, time: {end_time -start_time}.")
