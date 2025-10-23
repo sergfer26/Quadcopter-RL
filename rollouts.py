@@ -61,7 +61,7 @@ def rollout4mp(agent, env, mp_list, n=1, states_init=None, transform_x = None):
 
 
 def rollouts(agent, env, sims, state_space, num_workers=None,
-             transform_x=None):
+             transform_x=None, inv_transform_x=None):
     '''
     Retorno
     --------
@@ -85,10 +85,10 @@ def rollouts(agent, env, sims, state_space, num_workers=None,
         init_states[i] = np.array(
             [env.observation_space.sample() for _ in range(sims)])
         init_state = init_states[i]
-        # if callable(transform_x):
-        #     init_state = np.apply_along_axis(transform_x, -1, init_state)
+        if callable(transform_x):
+            init_state = np.apply_along_axis(transform_x, -1, init_state)
         p = Process(target=rollout4mp, args=(
-            agent, other_env, states, sims, init_state, transform_x
+            agent, other_env, states, sims, inv_transform_x
         )
         )
         process_list.append(p)
@@ -149,7 +149,7 @@ def main(args):
         logger.info(f"Policy's {sims} simulations started.")
 
         start_time = time.time()
-        states = rollouts(policy, env, sims, STATE_SPACE, transform_x=inv_transform_x)
+        states = rollouts(policy, env, sims, STATE_SPACE, transform_x=transform_x, inv_transform_x=inv_transform_x)
         end_time = time.time()
         logger.info(f"Policy's simulations ended, time: {end_time -start_time}.")
         mask1 = np.apply_along_axis(lambda x, y: np.greater(
