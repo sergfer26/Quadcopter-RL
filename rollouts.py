@@ -52,16 +52,16 @@ def plot_classifier(
     return ax, sc
 
 
-def rollout4mp(agent, env, mp_list, n=1, states_init=None, inv_transform_x=None):
+def rollout4mp(agent, env, mp_list, n=1, states_init=None, transform_x = None):
     '''
     states : (n, env.steps, env.observation_space.shape[0])
     '''
-    states = n_rollouts(agent, env, n=n, t_x=inv_transform_x, states_init=states_init)[0]
+    states = n_rollouts(agent, env, n=n, t_x=transform_x, states_init=states_init)[0]
     mp_list.append(states)
 
 
 def rollouts(agent, env, sims, state_space, num_workers=None,
-             inv_transform_x=None, transform_x=None):
+             transform_x=None):
     '''
     Retorno
     --------
@@ -88,7 +88,7 @@ def rollouts(agent, env, sims, state_space, num_workers=None,
         if callable(transform_x):
             init_state = np.apply_along_axis(transform_x, -1, init_state)
         p = Process(target=rollout4mp, args=(
-            agent, other_env, states, sims, init_state, inv_transform_x
+            agent, other_env, states, sims, init_state, transform_x
         )
         )
         process_list.append(p)
@@ -149,8 +149,7 @@ def main(args):
         logger.info(f"Policy's {sims} simulations started.")
 
         start_time = time.time()
-        states = rollouts(policy, env, sims, STATE_SPACE,
-                          inv_transform_x=inv_transform_x)
+        states = rollouts(policy, env, sims, STATE_SPACE, transform_x=inv_transform_x)
         end_time = time.time()
         logger.info(f"Policy's simulations ended, time: {end_time -start_time}.")
         mask1 = np.apply_along_axis(lambda x, y: np.greater(
