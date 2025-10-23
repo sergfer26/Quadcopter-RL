@@ -207,7 +207,7 @@ if __name__ == '__main__':
     parser.add_argument('--sims', type=int, default=int(1e4))
     parser.add_argument('--send-mail', action='store_true',
                         default=False, help='Enable sending mail')
-    parser.add_argument('--threshold', default=1, type=float)
+    parser.add_argument('--threshold', default=0.5, type=float)
     parser.add_argument('--ord', default='inf', type=str)
     args = parser.parse_args()
 
