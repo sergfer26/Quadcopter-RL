@@ -85,8 +85,8 @@ def rollouts(agent, env, sims, state_space, num_workers=None,
         init_states[i] = np.array(
             [env.observation_space.sample() for _ in range(sims)])
         init_state = init_states[i]
-        if callable(transform_x):
-            init_state = np.apply_along_axis(transform_x, -1, init_state)
+        # if callable(transform_x):
+        #     init_state = np.apply_along_axis(transform_x, -1, init_state)
         p = Process(target=rollout4mp, args=(
             agent, other_env, states, sims, init_state, transform_x
         )
